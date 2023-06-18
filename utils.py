@@ -1,6 +1,4 @@
 import pickle
-
-app = Flask(__name__)
 token = pickle.load(open("model/cv.pkl", 'rb'))
 model = pickle.load(open("model/clf.pkl", 'rb'))
 
