@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pickle
 
 app = Flask(__name__)
@@ -17,6 +17,16 @@ def predict():
     predicted = model.predict(tokenized_email)
     predicted = 1 if predicted == 1 else -1
     return render_template("index.html", predicted = predicted, email_text = email_text)
+
+@app.route('/api/predict', methods = ["POST"])
+def api_predict():
+
+    data = request.get_json(force="True")
+    email_text = data["email-content"]
+    tokenized_email = token.transform([email_text])
+    predicted = model.predict(tokenized_email)
+    predicted = 1 if predicted == 1 else -1
+    return jsonify({'predicted': predicted, 'email_text' : email_text})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)#debug is requried to refresh changes to code
